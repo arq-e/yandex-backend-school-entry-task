@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Entity
@@ -15,7 +16,7 @@ public class SystemItemHistoryNote {
     private String parentId;
     private SystemItemType type;
     private Long size;
-    private Date date;
+    private OffsetDateTime date;
 
     public SystemItemHistoryNote() {
     }
@@ -73,11 +74,11 @@ public class SystemItemHistoryNote {
         this.size = size;
     }
 
-    public Date getDate() {
+    public OffsetDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(OffsetDateTime date) {
         this.date = date;
     }
 }

@@ -3,6 +3,11 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 @Entity
 @Table(name = "main")
@@ -12,7 +17,7 @@ public class SystemItem {
     @Column(name = "url")
     private String url;
     @Column(name = "date")
-    private Date date;
+    private OffsetDateTime date;
     @Column(name = "parentId")
     private String parentId;
     @Column(name = "type")
@@ -26,7 +31,7 @@ public class SystemItem {
     public SystemItem() {
     }
 
-    public SystemItem(SystemItemImport importItem, Date date) {
+    public SystemItem(SystemItemImport importItem, OffsetDateTime date) {
         this.id = importItem.getId();
         this.url = importItem.getUrl();
         this.parentId = importItem.getParentId();
@@ -50,11 +55,11 @@ public class SystemItem {
         this.url = url;
     }
 
-    public Date getDate() {
+    public OffsetDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(OffsetDateTime date) {
         this.date = date;
     }
 

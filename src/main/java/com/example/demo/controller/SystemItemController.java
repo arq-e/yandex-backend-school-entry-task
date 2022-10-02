@@ -40,7 +40,7 @@ public class SystemItemController {
         return service.findFilesResponse(id);
     }
 
-    @GetMapping({"/history/{id}"})
+    @GetMapping({"/node/{id}/history"})
     @ResponseBody
     public ResponseEntity<HashMap<String, Object>> findHistory(@PathVariable @Nullable String id,
                                                                @RequestParam(name="dateStart")@Nullable String dateStart,

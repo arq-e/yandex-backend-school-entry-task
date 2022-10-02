@@ -71,6 +71,8 @@ public class SystemItemService {
     }
 
     public ResponseEntity<HashMap<String, Object>> importFilesResponse(SystemItemImportRequest request) {
+        List<String> updatedElements = new ArrayList<>();
+
         boolean isValidItems = request.getItems().stream().allMatch((x) -> {
             SystemItem item = new SystemItem(x, request.getUpdateDate());
             if (item.isValidItem(true)) {
@@ -79,13 +81,15 @@ public class SystemItemService {
                 boolean isFileInRepository = optionalItem.isPresent() && optionalItem.get().getType().getType().equals("FILE");
                 boolean isFileInRequest = request.getItems().stream().anyMatch((y) ->
                         (y.getId().equals(x.getParentId())) && y.getType().getType().equals("FILE"));
+                if (optionalItem.isPresent() && !isFileInRepository && !isFileInRequest) {
+                    updateDate(request.getUpdateDate(), optionalItem.get(), updatedElements);
+                }
                 return !isFileInRepository && !isFileInRequest;
             } else
                 return false;
         });
 
         if (request.validateIdsUnicity() && isValidItems) {
-            List<String> updatedElements = new ArrayList<>();
             for (SystemItemImport itemImport : request.getItems()) {
                 systemItemRepository.save(new SystemItem(itemImport, request.getUpdateDate()));
                 updatedElements.add(itemImport.getId());
@@ -94,6 +98,17 @@ public class SystemItemService {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return code400Response();
+        }
+    }
+
+    public void updateDate(OffsetDateTime newDate, SystemItem item, List<String> updatedElements) {
+        item.setDate(newDate);
+        systemItemRepository.save(item);
+        updatedElements.add(item.getId());
+
+        if (item.getParentId() != null) {
+            Optional<SystemItem> optionalItem = systemItemRepository.findById(item.getParentId());
+            optionalItem.ifPresent(systemItem -> updateDate(newDate, systemItem, updatedElements));
         }
     }
 
