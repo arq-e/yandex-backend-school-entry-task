@@ -270,11 +270,11 @@ def test_delete():
 
 def test_all():
     test_import()
-    time.sleep(3)
     test_nodes()
     test_updates()
     test_history()
     test_delete()
+    time.sleep(3)
 
 
 def main():
